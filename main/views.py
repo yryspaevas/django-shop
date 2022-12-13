@@ -18,6 +18,9 @@ from .filters import ProductFilter
 # для поиска по нескольким полям
 from django.db.models import Q
 
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+
 
 
 class CategoryViewSet(ModelViewSet):
@@ -37,6 +40,10 @@ class ProductViewSet(ModelViewSet):
             return [] # то разрешаем всем
         return [IsAdminUser()]
 
+
+    @swagger_auto_schema(manual_parameters=[
+        openapi.Parameter('q', openapi.IN_QUERY, type=openapi.TYPE_STRING),
+    ])
     @action(['GET'], detail=False)
     def search(self, request):
         # /products/search/?q=hello
